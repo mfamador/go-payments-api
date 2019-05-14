@@ -82,7 +82,6 @@ func main() {
 	}
 
 	defer paymentsRepo.Close()
-
 	if err := paymentsRepo.Check(); err != nil {
 		log.Fatal(errors.Wrap(err, "Could connect to the repo"))
 	}
