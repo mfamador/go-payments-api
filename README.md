@@ -317,7 +317,7 @@ The following settings are supported:
     	request timeout (default 60)
 ```
 
-# Thirparty libraries
+# Third party libraries
 
 The following table summarizes the main third-party libraries used in this project:
 
