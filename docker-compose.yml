@@ -1,0 +1,33 @@
+version: '2.4'
+services:
+    api:
+        container_name: go-payments-api
+        image: marcoamador/go-payments-api
+        ports:
+            - "8080:8080"
+        entrypoint:
+            - go-payments-api
+            - --repo=postgres
+            - --repo-uri=postgresql://postgres:postgres@postgres:5432/postgres?sslmode=disable
+            - --repo-migrations=/etc/go-payments-api/schema
+            - --metrics=true
+            - --admin=true
+        depends_on:
+            db:
+                condition: service_healthy
+    db:
+        container_name: postgres
+        image: postgres
+        ports:
+            - "5432:5432"
+        environment:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgres
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready -U postgres -d postgres"]
+            interval: 10s
+            timeout: 5s
+            retries: 10
+        volumes:
+            - ./data/data:/var/lib/postgresql/data
+            - ./data/run:/var/run/postgresql
