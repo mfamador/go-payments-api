@@ -84,7 +84,7 @@ func (c *Client) maybeParseJson(bytes []byte) {
 	var anyJson map[string]interface{}
 	err := json.Unmarshal(bytes, &anyJson)
 	if err != nil {
-		log.Info("Could not unmarshall json: %v", string(bytes))
+		log.Info("Could not unmarshal json: %v", string(bytes))
 	} else {
 		c.Json = anyJson
 	}

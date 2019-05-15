@@ -49,7 +49,6 @@ func (s *PaymentsService) Routes() *chi.Mux {
 }
 
 func (s *PaymentsService) List(w http.ResponseWriter, r *http.Request) {
-
 	from := IntFromStringOrDefault(r.URL.Query().Get("from"), 0)
 	to := IntFromStringOrDefault(r.URL.Query().Get("to"), s.maxResults)
 

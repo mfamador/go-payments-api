@@ -45,7 +45,7 @@ func FeatureContext(s *godog.Suite) {
 		})
 		if err != nil {
 			log.Info("Error before scenario:")
-			log.Info("%v", err)
+			log.Info(err)
 		}
 	})
 

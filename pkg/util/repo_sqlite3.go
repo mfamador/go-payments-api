@@ -51,7 +51,6 @@ func NewSqlite3Repo(config RepoConfig) (Repo, error) {
 			return repo, errors.Wrap(err, "Error while syncing")
 		}
 	}
-
 	repo.db = database
 	return repo, nil
 }

@@ -68,15 +68,10 @@ func NewHttpLogger() func(next http.Handler) http.Handler {
 
 			start := time.Now()
 
-			// wrap our response write, so that we are able
-			// to intercept the status code and the content length
 			wrapper := &statusWriter{
 				ResponseWriter: w,
 			}
 
-			// Define our log function to be called in
-			// deferred mode, so that this gets logged even
-			// if a panic ocurrs
 			defer func() {
 
 				severity := "info"
@@ -91,9 +86,6 @@ func NewHttpLogger() func(next http.Handler) http.Handler {
 					Uri:      r.RequestURI,
 					Usec:     int(time.Now().Sub(start) / time.Microsecond),
 					Status:   wrapper.status,
-
-					// Add more fields, such as user agent
-					// peer ip/port etc..
 				})
 			}()
 			next.ServeHTTP(wrapper, r)

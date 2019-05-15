@@ -49,7 +49,6 @@ func (repo *SqlRepo) Init() error {
 	if repo.schema == "" {
 		return fmt.Errorf("no schema defined")
 	}
-
 	repo.countStmt = repo.fmtTemplate(countStmtTemplate)
 	repo.deleteAllStmt = repo.fmtTemplate(deleteAllStmtTemplate)
 	repo.listStmt = repo.fmtTemplate(listStmtTemplate)
@@ -70,14 +69,11 @@ func (repo *SqlRepo) Check() error {
 
 func (repo *SqlRepo) List(offset int, limit int) ([]*RepoItem, error) {
 	items := []*RepoItem{}
-
 	rows, err := repo.db.Query(repo.listStmt, limit, offset)
 	if err != nil {
 		return items, errors.Wrap(err, repo.listStmt)
 	}
-
 	defer rows.Close()
-
 	for rows.Next() {
 		item := &RepoItem{}
 		err := rows.Scan(&item.Id, &item.Version, &item.Organisation, &item.Attributes)
@@ -85,7 +81,6 @@ func (repo *SqlRepo) List(offset int, limit int) ([]*RepoItem, error) {
 			return items, errors.Wrap(err, "Error parsing database row")
 		}
 		items = append(items, item)
-
 	}
 	return items, nil
 }
