@@ -206,7 +206,6 @@ We then provide two implementations:
 
 - **PostgresRepo**
 
-
 With this design, it is easy to switch, out of the box, from Sqlite3 to Postgres (please see the ```—repo-xxx``` command line flags and the provided Makefile for more info and usage examples).
 
 It should straightforward to extend the system with alternative NoSQL implementations (eg. MongoRepo, RedisRepo).
@@ -333,4 +332,3 @@ The following table summarizes the main third-party libraries used in this proje
 | https://github.com/pkg/errors                        | Simple error handling primitives                             |
 | https://github.com/lib/pq                            | Pure Go Postgres driver for database/sql                     |
 | https://github.com/ddliu/go-httpclient               | Advanced HTTP client for golang                              |
-

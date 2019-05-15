@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/ddliu/go-httpclient"
+	log "github.com/sirupsen/logrus"
 	"io/ioutil"
-	"log"
 	"strings"
 )
 
@@ -69,7 +69,7 @@ func (c *Client) parseResponse() {
 	if c.Resp != nil && c.Resp.Body != nil {
 		bytes, err := ioutil.ReadAll(c.Resp.Body)
 		if err != nil {
-			log.Printf("Could not read bytes from http response")
+			log.Info("Could not read bytes from http response")
 		} else {
 			if c.HasJson() {
 				c.maybeParseJson(bytes)
@@ -84,7 +84,7 @@ func (c *Client) maybeParseJson(bytes []byte) {
 	var anyJson map[string]interface{}
 	err := json.Unmarshal(bytes, &anyJson)
 	if err != nil {
-		log.Printf("Could not unmarshall json: %v", string(bytes))
+		log.Info("Could not unmarshall json: %v", string(bytes))
 	} else {
 		c.Json = anyJson
 	}

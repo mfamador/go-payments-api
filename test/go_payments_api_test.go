@@ -5,7 +5,7 @@ import (
 	"github.com/DATA-DOG/godog"
 	"github.com/DATA-DOG/godog/colors"
 	. "github.com/mfamador/go-payments-api/pkg/test"
-	"log"
+	log "github.com/sirupsen/logrus"
 	"os"
 	"testing"
 )
@@ -44,8 +44,8 @@ func FeatureContext(s *godog.Suite) {
 			return w.ThereAreNoPayments()
 		})
 		if err != nil {
-			log.Printf("Error before scenario:")
-			log.Printf("%v", err)
+			log.Info("Error before scenario:")
+			log.Info("%v", err)
 		}
 	})
 

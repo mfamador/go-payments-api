@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/go-chi/chi"
 	. "github.com/mfamador/go-payments-api/pkg/util"
-	"log"
+	log "github.com/sirupsen/logrus"
 	"net/http"
 	"strconv"
 	"strings"
@@ -169,7 +169,7 @@ func (s *PaymentsService) Create(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	log.Printf("payment: %v", p)
+	log.Info("payment: %v", p)
 
 	err = p.Validate()
 	if err != nil {
