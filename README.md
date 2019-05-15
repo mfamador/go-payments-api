@@ -113,13 +113,13 @@ The following table summarizes the HTTP status codes returned by the application
 The application server follows a conventional layered architecture with a:
 
 - A web layer, with the following features:
-  - A pluggable, hierarchical **router** so that we can add new api versions in the future, and still keep backwards compatibility with old clients
+  - A plugable, hierarchical **router** so that we can add new api versions in the future, and still keep backwards compatibility with old clients
   - A set of **middleware** that perform common concerns such as **logging**, **rate-limiting**, **supervision** against panics, content-type validation, cache management, response headers customizations, etc..
 - A persistence layer, abstracted by the concept of a **Repo**, that decouples our application behaviour from a particular storage technology. 
 
 ## Request-Response cycle
 
-The following diagram depics a basic request-response cycle:
+The following diagram depicts a basic request-response cycle:
 
 ```sequence
 Client->Router: POST /v1/payments
@@ -139,7 +139,7 @@ PaymentsService->Client: 201 created
 
 In this diagram:
 
-- A HTTP POST request comes in, it is routed to the PaymentsService' ```Create``` handler function.  
+- A HTTP POST request comes in, it is routed to the PaymentsService's ```Create``` handler function.  
 - The request body JSON payload is parsed and a new `Payment` struct is created
 - The payment is validated.
 - If success, the payment is converted into a `RepoItem`, in order to be saved into the `Repo`. 
@@ -206,7 +206,6 @@ We then provide two implementations:
 
 - **PostgresRepo**
 
-  
 
 With this design, it is easy to switch, out of the box, from Sqlite3 to Postgres (please see the ```—repo-xxx``` command line flags and the provided Makefile for more info and usage examples).
 

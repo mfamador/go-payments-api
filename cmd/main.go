@@ -147,11 +147,7 @@ func main() {
 	}
 
 	router.Route("/v1", func(v1Router chi.Router) {
-
-		// payments api
 		v1Router.Mount("/", payments.New(paymentsRepo, baseUrl, *maxResults).Routes())
-
-		// more endpoints here...
 	})
 
 	if err := chi.Walk(router, func(method string,
