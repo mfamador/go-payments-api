@@ -2,22 +2,23 @@ package main
 
 import (
 	"flag"
+	"os"
+	"testing"
+
 	"github.com/DATA-DOG/godog"
 	"github.com/DATA-DOG/godog/colors"
 	. "github.com/mfamador/go-payments-api/pkg/test"
 	log "github.com/sirupsen/logrus"
-	"os"
-	"testing"
 )
 
 var (
 	opt        = godog.Options{Output: colors.Colored(os.Stdout)}
-	serverUrl  *string
+	serverURL  *string
 	apiVersion *string
 )
 
 func init() {
-	serverUrl = flag.String("server-url", "http://localhost:8080", "the payments server url to test against")
+	serverURL = flag.String("server-url", "http://localhost:8080", "the payments server url to test against")
 	apiVersion = flag.String("api-version", "v1", "the api version")
 	godog.BindFlags("godog.", flag.CommandLine, &opt)
 }
@@ -37,7 +38,7 @@ func TestMain(m *testing.M) {
 }
 
 func FeatureContext(s *godog.Suite) {
-	w := NewWorld(*serverUrl, *apiVersion)
+	w := NewWorld(*serverURL, *apiVersion)
 	s.BeforeScenario(func(interface{}) {
 		w.NewData()
 		err := DoThen(w.TheServiceIsUp(), func() error {
