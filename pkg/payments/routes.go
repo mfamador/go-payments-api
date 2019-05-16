@@ -94,7 +94,6 @@ func (s *PaymentsService) Fetch(w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "id")
 	found, err := s.repo.Fetch(&RepoItem{Id: id})
 	if err != nil {
-		// Look for not found errors
 		if s.repo.IsNotFound(err) {
 			HandleHttpError(w, r, http.StatusNotFound, err)
 		} else {
@@ -130,7 +129,6 @@ func (s *PaymentsService) Delete(w http.ResponseWriter, r *http.Request) {
 
 	_, err = s.repo.Fetch(&RepoItem{Id: id})
 	if err != nil {
-		// Look for not found errors
 		if s.repo.IsNotFound(err) {
 			HandleHttpError(w, r, http.StatusNotFound, err)
 		} else {
@@ -141,13 +139,8 @@ func (s *PaymentsService) Delete(w http.ResponseWriter, r *http.Request) {
 
 	err = s.repo.Delete(&RepoItem{Id: id, Version: version})
 	if err != nil {
-		// Look for not found errors again
 		errorCode := http.StatusInternalServerError
 		if s.repo.IsNotFound(err) || s.repo.IsConflict(err) {
-			// The item was deleted in between, from a different goroutine
-			// or was updated and the version increased. We treat both
-			// cases as a concurren modification, that we
-			// translate into a 409 Conflict
 			errorCode = http.StatusConflict
 		}
 		HandleHttpError(w, r, errorCode, err)
@@ -161,14 +154,11 @@ func (s *PaymentsService) Create(w http.ResponseWriter, r *http.Request) {
 
 	p, err := decodePayment(r)
 	if err != nil {
-		// Something wrong with the JSON
-		// Translate this into a 400 Bad Request and finish
-		// the request
 		HandleHttpError(w, r, http.StatusBadRequest, err)
 		return
 	}
 
-	log.Info("payment: %v", p)
+	log.Info("payment: ", *p)
 
 	err = p.Validate()
 	if err != nil {
@@ -178,8 +168,6 @@ func (s *PaymentsService) Create(w http.ResponseWriter, r *http.Request) {
 
 	repoItem, err := p.ToRepoItem()
 	if err != nil {
-		// check for conflicts
-		// or internal errors
 		HandleHttpError(w, r, http.StatusInternalServerError, err)
 		return
 	}
@@ -187,8 +175,6 @@ func (s *PaymentsService) Create(w http.ResponseWriter, r *http.Request) {
 	createdItem, err := s.repo.Create(repoItem)
 	if err != nil {
 		if s.repo.IsConflict(err) {
-			// We have a conflict, so return the appropiate
-			// status code
 			HandleHttpError(w, r, http.StatusConflict, err)
 		} else {
 			HandleHttpError(w, r, http.StatusInternalServerError, err)
@@ -216,9 +202,6 @@ func (s *PaymentsService) Update(w http.ResponseWriter, r *http.Request) {
 
 	p, err := decodePayment(r)
 	if err != nil {
-		// Something is wrong with the JSON
-		// Translate this into a 400 Bad Request and finish
-		// the request
 		HandleHttpError(w, r, http.StatusBadRequest, err)
 		return
 	}
@@ -238,7 +221,6 @@ func (s *PaymentsService) Update(w http.ResponseWriter, r *http.Request) {
 
 	_, err = s.repo.Fetch(&RepoItem{Id: id})
 	if err != nil {
-		// Look for not found errors
 		if s.repo.IsNotFound(err) {
 			HandleHttpError(w, r, http.StatusNotFound, err)
 		} else {
@@ -256,8 +238,6 @@ func (s *PaymentsService) Update(w http.ResponseWriter, r *http.Request) {
 	updatedItem, err := s.repo.Update(repoItem)
 	if err != nil {
 		if s.repo.IsConflict(err) {
-			// We have a conflict, so return the appropiate
-			// status code
 			HandleHttpError(w, r, http.StatusConflict, err)
 		} else {
 			HandleHttpError(w, r, http.StatusInternalServerError, err)

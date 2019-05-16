@@ -3,7 +3,7 @@ package util
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/mfamador/go-payments-api/pkg/logger"
+	log "github.com/sirupsen/logrus"
 	"net/http"
 	"strconv"
 )
@@ -20,7 +20,7 @@ type EmptyResponse struct{}
 
 func HandleHttpError(w http.ResponseWriter, r *http.Request, status int, err error) {
 	RenderJSON(w, r, status, &EmptyResponse{})
-	logger.Error(err)
+	log.Error(err)
 }
 
 func RenderJSON(w http.ResponseWriter, r *http.Request, status int, data interface{}) {
@@ -30,7 +30,7 @@ func RenderJSON(w http.ResponseWriter, r *http.Request, status int, data interfa
 	enc.SetEscapeHTML(false)
 	err := enc.Encode(data)
 	if err != nil {
-		logger.Error(err)
+		log.Error(err)
 	}
 }
 

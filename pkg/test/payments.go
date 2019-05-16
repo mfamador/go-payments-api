@@ -226,7 +226,6 @@ func (w *World) ICreatedANewPaymentWithId(id string) error {
 
 func (w *World) ICreatePayments(count int) error {
 	return DoSequence(func(it int) error {
-		// convert the iteration number into an id
 		id := fmt.Sprintf("payment%v", it)
 		return DoThen(w.APaymentWithId(id), func() error {
 			return DoThen(w.ICreateThatPayment(), func() error {

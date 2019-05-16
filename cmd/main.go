@@ -10,7 +10,6 @@ import (
 	"github.com/go-chi/render"
 	"github.com/mfamador/go-payments-api/pkg/admin"
 	"github.com/mfamador/go-payments-api/pkg/health"
-	"github.com/mfamador/go-payments-api/pkg/logger"
 	"github.com/mfamador/go-payments-api/pkg/payments"
 	"github.com/mfamador/go-payments-api/pkg/util"
 	"github.com/pkg/errors"
@@ -103,8 +102,6 @@ func main() {
 		router.Use(chiprometheus.NewMiddleware("payments"))
 	}
 
-	router.Use(logger.NewHttpLogger())
-
 	if *compress {
 		router.Use(middleware.DefaultCompress)
 	}
@@ -155,13 +152,13 @@ func main() {
 		handler http.Handler,
 		middlewares ...func(http.Handler) http.Handler) error {
 		route = strings.Replace(route, "/*/", "/", -1)
-		logger.Info("Mounted route", &RouteInfo{Method: method, Path: route})
+		log.Info("Mounted route", &RouteInfo{Method: method, Path: route})
 		return nil
 	}); err != nil {
 		log.Printf(err.Error())
 	}
 
-	logger.Info("Started server", &ServerInfo{
+	log.Info("Started server", &ServerInfo{
 		ExternalUrl: *externalUrl,
 		ApiVersion:  *apiVersion,
 		Interface:   *listen,

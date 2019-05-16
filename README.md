@@ -163,24 +163,6 @@ The PaymentAttributes type defines the additional data we manage about a payment
 | -------- | ------ | -------------------------------------------------- |
 | Amount   | String | Must represent a number strictly greater than zero |
 
-Notes:
-
-- I am **intentionally** **skipping** any other validations or parsing on the internal structure of the attributes payload. 
-- Implementation details are in package ```gitHub.com/mfamador/go-payments-api/pkg/payments```.
-
-# Authentication
-
-We are not covering authentication/authorization. All requests are anonymous. 
-
-Admin endpoints are also anonymous, however they can be disabled via the ```-admin``` command line flag.
-
-# Logging
-
-Package ```github.com/mfamador/go-payments-api/pkg/logger``` introduces a structured logger that outputs JSON formatted log entries to the standard output. This way:
-
-- We support distributed, elastic deployments, such as Kubernetes, where we could have many replicas of our service running side to side. We leave the orchestrator the task to collect logs from all pods and centralize their management.
-- By being JSON, it will be easier to consume log entries and aggregate them, using tools such as Elasticsearch/Kibana.
-
 # Testing
 
 We use BDDs in order to specify the functional behavior to be implemented by this service, and drive our development. 
@@ -258,8 +240,6 @@ The database itself has state. With the current implementation, can easily scale
 # Fault tolerance
 
 ### Mechanisms in place
-
-- All errors resulting from our interaction with the database are caught and logged in the web layer, using our structure logger.
 
 - Panics are recovered by Chi's standard Recoverer middleware.
 - Long requests will timeout according to a configurable settings (```—timeout``` command line flag)
