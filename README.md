@@ -246,7 +246,7 @@ The database itself has state. With the current implementation, can easily scale
 
 ### Mechanisms not yet in place
 
-- Using a circuit breaker, such as Netflix's Hystrix will certainly let us fail fast, in case the database becomes a bottleneck and starts to repond slowly. This could be added to our microservice or we can also manage this a higher level using a service mesh architecture. 
+- Using a circuit breaker, such as Netflix's Hystrix will certainly let us fail fast, in case the database becomes a bottleneck and starts to respond slowly. This could be added to our microservice or we can also manage this a higher level using a service mesh architecture. 
 
 # Capacity
 
@@ -312,3 +312,4 @@ The following table summarizes the main third-party libraries used in this proje
 | https://github.com/pkg/errors                        | Simple error handling primitives                             |
 | https://github.com/lib/pq                            | Pure Go Postgres driver for database/sql                     |
 | https://github.com/ddliu/go-httpclient               | Advanced HTTP client for golang                              |
+| https://github.com/sirupsen/logrus                   | Structured logger for Go                                     |
