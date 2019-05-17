@@ -31,7 +31,6 @@ func NewPostgresRepo(config RepoConfig) (Repo, error) {
 	}
 
 	if config.Migrations != "" {
-
 		driver, err := postgres.WithInstance(database, &postgres.Config{})
 		if err != nil {
 			return repo, errors.Wrap(err, "Could not start migration")
@@ -48,7 +47,6 @@ func NewPostgresRepo(config RepoConfig) (Repo, error) {
 		if err := m.Up(); err != nil && err != migrate.ErrNoChange {
 			return repo, errors.Wrap(err, "Error while syncing")
 		}
-
 	}
 
 	repo.db = database

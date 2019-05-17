@@ -2,13 +2,12 @@ package main
 
 import (
 	"flag"
-	"os"
-	"testing"
-
 	"github.com/DATA-DOG/godog"
 	"github.com/DATA-DOG/godog/colors"
 	. "github.com/mfamador/go-payments-api/pkg/test"
 	log "github.com/sirupsen/logrus"
+	"os"
+	"testing"
 )
 
 var (
