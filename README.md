@@ -50,14 +50,6 @@ make bdd-wip
 
 The following sections provide with a high level description of the API. For more detail, please refer to the OpenApi 3.0 schema located at `api/openapi.yml`. 
 
-Note:
-
-- In the spec, the endpoints ```/health``` and ```/metrics``` are documented as part of the ```v1``` version, however in the implementation I finally decided to move them one level up (i.e. they don't have a version prefix).
-
-## Content types
-
-All endpoints accept and return ```application/json``` content-type, except the ```/metrics``` endpoint, which only returns ```text/plain```. 
-
 ## Application endpoints
 
 |      | Path             | Method | Description                       | Query parameters | Specific codes returned |
@@ -188,32 +180,12 @@ We then provide two implementations:
 
 - **PostgresRepo**
 
-With this design, it is easy to switch, out of the box, from Sqlite3 to Postgres (please see the ```—repo-xxx``` command line flags and the provided Makefile for more info and usage examples).
-
+With this design, it is easy to switch, out of the box, from Sqlite3 to Postgres (see ```—repo-xxx``` and Makefile).
 It should straightforward to extend the system with alternative NoSQL implementations (eg. MongoRepo, RedisRepo).
 
 ## Concurrency
 
-In the **SQLRepo**, we implement a basic optimistic locking scheme in order to support concurrent updates to the same payment:
-
-```sequence
-Client A->Repo: getVersion
-Repo->Client A: 1
-Client B->Repo: getVersion
-Repo->Client B: 1
-Client A->Repo: update where version = 1
-Repo->Client A: 1 row affected
-Client B->Repo: update where version = 1
-Repo->Client B: 0 rows affected
-```
-
-In the diagram above:
-
-- Clients A and B try to update the same document, concurrently, from different goroutines. They both fetch the current version in the store. In this example, they both obtain version equal to 1:
-- In order to update the document's data, they both increase their version number on their side, as well as the payload, then issue a transaction similar to:
-- From client A's perspective, one row was affected by the update and the operation is considered to be successful. We rely on the data store's **ACID** **semantics** in order to ensure one of the concurrent updates succeeds.
-
-- From client B's perspective, by the time its update statement is applied, version 1 no longer exists. The number of affected rows is zero, therefore the update is discarded and treated as an error.  The error will be reported back to the client, who will need to fetch the most recent version of the payment and retry the update.
+In the **SQLRepo**, a basic versioning based optimistic locking scheme is implemented in order to support concurrent updates to the same payment.
 
 # Monitoring
 
@@ -221,9 +193,7 @@ We provide the ability to turn on, and expose Prometheus based metrics. This wil
 
 # Resiliency
 
-- We provide a simple liveliness probe that checks the connectivity to the repo and returns a ```503 Service unavailable``` status code as soon it can no longer be reached. This should instruct the orchestrator (eg. Kubernetes) to stop sending traffic to the offending pod or even to shut it down if necessary.
-
-- Our SQLRepo implementation relies on Go's standard sql package. This allows us to rely on the default connection pooling and automatically recover from connection loss from the database.
+A simple liveliness probe is provided to check the connectivity to the repo and returns a ```503 Service unavailable``` status code as soon it can no longer be reached. This should instruct the orchestrator (eg. Kubernetes) to stop sending traffic to the offending pod or even to shut it down if necessary.
 
 # Scalability
 
@@ -239,28 +209,18 @@ The database itself has state. With the current implementation, can easily scale
 
 # Fault tolerance
 
-### Mechanisms in place
-
 - Panics are recovered by Chi's standard Recoverer middleware.
-- Long requests will timeout according to a configurable settings (```—timeout``` command line flag)
-
-### Mechanisms not yet in place
-
-- Using a circuit breaker, such as Netflix's Hystrix will certainly let us fail fast, in case the database becomes a bottleneck and starts to respond slowly. This could be added to our microservice or we can also manage this a higher level using a service mesh architecture. 
+- Long requests will timeout according to a configurable settings (```—timeout```)
 
 # Capacity
 
-Resource limits such as CPU, memory can be set on the Docker containers. Also, using a service mesh architecture can help control traffic between services.
-
-For simplicity, we include ```ulule/limiter``` which makes it easy to implement a rate limit mechanism, by configuration (see the ```—liimit``` command line flag).
+```ulule/limiter``` is included to implement a rate limit mechanism, by configuration (see the ```—liimit```).
 
 Once the configured rate is reached, a 429 status code will be returned.
 
 # Configuration
 
-Our microservice only supports configuration via standard Go command line flags.
-
-The following settings are supported:
+The following settings are supported via command line flags:
 
 ```
   -admin
@@ -278,7 +238,7 @@ The following settings are supported:
   -listen string
     	the http interface to listen at (default ":8080")
   -max-results int
-    	Maximum number of results when listing items (eg. payments) (default 20)
+    	Maximum number of results when listing items (default 100)
   -metrics
     	expose prometheus metrics
   -profiling
@@ -292,7 +252,7 @@ The following settings are supported:
   -repo-uri string
     	repo specific connection string
   -timeout int
-    	request timeout (default 60)
+    	request timeout (default 300)
 ```
 
 # Third party libraries
