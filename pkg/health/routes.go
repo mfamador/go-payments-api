@@ -3,6 +3,7 @@ package health
 import (
 	"github.com/go-chi/chi"
 	. "github.com/mfamador/go-payments-api/pkg/util"
+	log "github.com/sirupsen/logrus"
 	"net/http"
 )
 
@@ -21,6 +22,8 @@ func (s *HealthService) Routes() *chi.Mux {
 }
 
 func (s *HealthService) Get(w http.ResponseWriter, r *http.Request) {
+	log.Info("Health check")
+
 	statusCode := http.StatusOK
 	statusMsg := "up"
 	if s.repo.Check() != nil {
