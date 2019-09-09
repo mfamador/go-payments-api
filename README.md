@@ -40,7 +40,7 @@ Once the server is running, you can easily run all BDD scenarios:
 make bdd
 ```
 
-Alternatively you can run only those BDD scenarios that are tagged with the ```@wip``` tag (useful during development):
+Alternatively you can run only those BDD scenarios that are tagged with the ```@wip``` tag (dev):
 
 ```
 make bdd-wip
