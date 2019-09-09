@@ -254,22 +254,3 @@ The following settings are supported via command line flags:
   -timeout int
     	request timeout (default 300)
 ```
-
-# Third party libraries
-
-The following table summarizes the main third-party libraries used in this project:
-
-| Url                                                  | Description                                                  |
-| ---------------------------------------------------- | ------------------------------------------------------------ |
-| https://github.com/DATA-DOG/godog                    | Cucumber for Golang                                          |
-| https://github.com/ulule/limiter                     | Dead simple rate limit middleware for Go.                    |
-| https://github.com/mattn/go-sqlite3                  | Sqlite3 driver for go using database/sql                     |
-| https://github.com/rubenv/sql-migrate                | SQL schema migration tool for Go.                            |
-| https://github.com/prometheus/client_golang/promhttp | Prometheus instrumentation library for Go applications       |
-| https://github.com/smartystreets/assertions          | Fluent assertion-style functions used by `goconvey` and `gunit`. Can also be used in any test or application. |
-| https://github.com/mdaverde/jsonpath                 | `jsonpath` golang library to help with getting and setting values on paths (even nonexistent paths) |
-| https://github.com/go-chi/chi                        | lightweight, idiomatic and composable router for building Go HTTP services |
-| https://github.com/pkg/errors                        | Simple error handling primitives                             |
-| https://github.com/lib/pq                            | Pure Go Postgres driver for database/sql                     |
-| https://github.com/ddliu/go-httpclient               | Advanced HTTP client for golang                              |
-| https://github.com/sirupsen/logrus                   | Structured logger for Go                                     |
