@@ -2,8 +2,8 @@ package main
 
 import (
 	"flag"
-	"github.com/DATA-DOG/godog"
-	"github.com/DATA-DOG/godog/colors"
+	"github.com/cucumber/godog"
+	"github.com/cucumber/godog/colors"
 	. "github.com/mfamador/go-payments-api/pkg/test"
 	log "github.com/sirupsen/logrus"
 	"os"

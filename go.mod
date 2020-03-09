@@ -4,8 +4,8 @@ go 1.12
 
 require (
 	github.com/766b/chi-prometheus v0.0.0-20180509160047-46ac2b31aa30
-	github.com/DATA-DOG/godog v0.7.13
 	github.com/Microsoft/go-winio v0.4.12 // indirect
+	github.com/cucumber/godog v0.8.1
 	github.com/ddliu/go-httpclient v0.5.1
 	github.com/docker/distribution v2.7.1+incompatible // indirect
 	github.com/docker/docker v1.13.1 // indirect
